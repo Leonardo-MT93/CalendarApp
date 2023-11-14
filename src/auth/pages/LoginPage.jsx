@@ -1,5 +1,7 @@
-import { useForm } from '../../hooks';
+import { useEffect } from 'react';
+import { useAuthStore, useForm } from '../../hooks';
 import './LoginPage.css';
+import Swal from 'sweetalert2';
 
 
 const loginFormFields = {
@@ -17,18 +19,35 @@ const registerFormFields = {
 
 export const LoginPage = () => {
 
+    const  { startLogin, startRegister, errorMessage } = useAuthStore();
+
     const { loginEmail, loginPassword, onInputChange: onLoginInputChange} = useForm( loginFormFields);
     const { registerEmail, registerName, registerPassword, registerPassword2, onInputChange: onRegisterInputChange} = useForm( registerFormFields);
 
     const loginSubmit = (e) => {
         e.preventDefault();
-        console.log({loginEmail, loginPassword})
+        startLogin({email:loginEmail, password:loginPassword})
     }
 
     const registerSubmit = (e) => {
         e.preventDefault();
-        console.log({registerEmail, registerName, registerPassword, registerPassword2})
+        if(registerPassword !== registerPassword2){
+            Swal.fire('Error en el registro', 'Contraseñas no son iguales', 'error')
+        }
+        startRegister({name: registerName, email: registerEmail, password: registerPassword})
     }
+
+    useEffect(() => {
+        
+        if (errorMessage !== undefined && errorMessage.length > 0 && Array.isArray(errorMessage)) {
+            const errorMessages = errorMessage.map((error) => error);
+            const combinedMessage = errorMessages.join('<br>'); // Unir mensajes con un salto de línea
+    
+            Swal.fire('Error en la autenticacion', combinedMessage, 'error');
+        }
+
+    }, [errorMessage])
+    
     return (
         <div className="container login-container">
             <div className="row">

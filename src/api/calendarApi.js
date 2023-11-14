@@ -9,4 +9,15 @@ const { VITE_API_URL } = getEnvVariables()
 
     //cONFIGURAR INTERCEPTORES
 
+    calendarApi.interceptors.request.use(config => {
+
+        //Modifico mis headers
+        
+        config.headers = {
+            ...config.headers,
+            'x-token': localStorage.getItem('token')
+        }
+
+        return config;
+    })
     export default calendarApi;
