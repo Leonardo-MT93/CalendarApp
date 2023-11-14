@@ -4,7 +4,7 @@ import { CalendarPage } from "../calendar";
 
 export const AppRouter = () => {
 
-    const authStatus = 'authenticated';
+    const authStatus = 'not-authenticated';
     //version simplificada de rutas publicas y rutas privadas
   return (
     <Routes>
@@ -14,7 +14,6 @@ export const AppRouter = () => {
             ?         <Route  path='/auth/*' element={<LoginPage/>} />
             :         <Route  path='/*' element={<CalendarPage/>} />
         }
-
 
 
         <Route  path='/*' element={<Navigate to='/auth/login'/>} />
